@@ -19,7 +19,13 @@ class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):
 class ArticlePostViewSset(viewsets.ViewSet):
     queryset = Article.objects.filter(active=True)
     serializer_class = ArticleSerializer
+    
+    def get_permissions(self):
+        if self.action in ['create']:
+            return [permissions.IsAuthenticated()]
 
+        return [permissions.AllowAny()]
+    
     def list(self, request):
         articles = Article.objects.filter(active=True)
         serializer = ArticleSerializer(articles, many=True)

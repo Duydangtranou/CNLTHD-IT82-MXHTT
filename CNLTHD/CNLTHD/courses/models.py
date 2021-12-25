@@ -18,6 +18,7 @@ class ModelBase(models.Model):
     image = models.ImageField(upload_to='courses/%Y/%m', default=None)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     def __str__(self):

@@ -27,10 +27,9 @@ class ArticleSerializer(ModelSerializer):
 
         return request.build_absolute_uri(path)
 
-    
     class Meta:
         model = Article
-        fields = ["id", "subject", "image", "created_date", 'updated_date', "category"]
+        fields = ["id", "subject", "image", "created_date", "updated_date", "creator", "category"]
 
 
 class ArticleDetailSerializer(ArticleSerializer):

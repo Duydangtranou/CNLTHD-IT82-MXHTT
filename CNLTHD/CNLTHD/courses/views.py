@@ -16,6 +16,31 @@ class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):
     serializer_class = CategorySerializer
 
 
+class ArticlePostViewSset(viewsets.ViewSet):
+    queryset = Article.objects.filter(active=True)
+    serializer_class = ArticleSerializer
+
+    def list(self, request):
+        articles = Article.objects.filter(active=True)
+        serializer = ArticleSerializer(articles, many=True)
+
+        return Response(data=serializer.data)
+
+    def create(self, request):
+        d = request.data
+        file = request.data['file']
+        if d:
+            l = Article.objects.create(subject=d['subject'],
+                                        content=d['content'],
+                                        creator=request.user)
+
+            serializer = ArticleSerializer(l)
+            return Response(serializer.data,
+                        status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class ArticleViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
     serializer_class = ArticleDetailSerializer
     queryset = Article.objects.filter(active=True)
@@ -52,7 +77,7 @@ class ArticleViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
         content = request.data.get('content')
         if content:
             c = Comment.objects.create(content=content,
-                                       lesson=self.get_object(),
+                                       article=self.get_object(),
                                        creator=request.user)
 
             return Response(CommentSerializer(c, context={"request": request}).data,
@@ -69,7 +94,7 @@ class ArticleViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
         else:
             action = Action.objects.create(type=action_type,
                                            creator=request.user,
-                                           lesson=self.get_object())
+                                           article=self.get_object())
 
             return Response(ActionSerializer(action).data,
                             status=status.HTTP_200_OK)
@@ -82,7 +107,7 @@ class ArticleViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             r = Rating.objects.update_or_create(creator=request.user,
-                                                lesson=self.get_object(),
+                                                article=self.get_object(),
                                                 defaults={"rate": rating})
 
             return Response(RatingSerializer(r).data,
@@ -90,7 +115,7 @@ class ArticleViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
 
     @action(methods=['get'], detail=True, url_path='views')
     def inc_view(self, request, pk):
-        v, created = ArticleView.objects.get_or_create(lesson=self.get_object())
+        v, created = ArticleView.objects.get_or_create(article=self.get_object())
         v.views = F('views') + 1
         v.save()
 

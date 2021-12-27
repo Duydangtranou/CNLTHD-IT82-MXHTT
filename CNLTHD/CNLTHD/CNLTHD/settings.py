@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'courses',
     'rest_framework',
-    'oauth2_provider'
+    'oauth2_provider',
+    'drf_yasg'
 ]
 
 REST_FRAMEWORK = {
@@ -49,8 +50,12 @@ REST_FRAMEWORK = {
 }
 
 OAUTH2_INFO = {
-    "client_id": "xccqoxXjAG2fE9sA1VrmDcKOmXMseZoWnrllwfBF",
-    "client_serect": "S6ryXk0kwzadT5w8Xml0PTPbwqPNgXkybDhlXpx6K6AqbgzgrFbqY7L8dRqXU78PAH79az0y2nSCvD8ZYE2sYlJaJIcKBg9Ec2t0xEKNY0topKHiUkihVaVF4HWNdppl"
+    "client_id": "YfxECoRGiBgqOp6RBrKNuiQcLktZvLVmDyExNPCb",
+    "client_serect": "8fctnxTZE9s39mLC4kyPpEb4pM8t6g2dR8370hLBQ4Qj1kmrm7fVVIgCJcqXol4HrXOSGLKTwrZwWJVNygFhZH0mrTQDw1fnr2h3uNBWSE7GBLnsN8Ejz80cugEGo60A"
+}
+
+OAUTH2_PROVIDER = {
+     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
 
 MIDDLEWARE = [
